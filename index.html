@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>CG ESPORTS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- SWIPER CSS (Yeh line zaroori hai) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <style>
+        :root {
+            --bg-primary: #0C0C27; --bg-secondary: #1C1C3A; --text-primary: #FFFFFF;
+            --text-secondary: #A0A0B8; --accent-primary: #FACC15; --accent-secondary: #00E0FF;
+            --accent-red: #F94879; --border-color: #2a2a4a;
+        }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-primary); color: var(--text-primary); padding-top: 70px; padding-bottom: 80px; }
+        .main-content { padding: 1rem; }
+        .section { display: none; } .section.active { display: block; } 
+        .app-header { position: fixed; top: 0; left: 0; width: 100%; height: 70px; background-color: var(--bg-primary); display: flex; justify-content: space-between; align-items: center; padding: 0 1rem; z-index: 1000; border-bottom: 1px solid var(--border-color); }
+        .app-header .header-left { display: flex; align-items: center; gap: 1rem; }
+        .app-header .header-back-button { background: none; border: none; color: white; font-size: 1.5rem; display: none; }
+        .app-header .header-page-title { font-size: 1.2rem; font-weight: 600; display: none; }
+        .user-info { display: flex; align-items: center; gap: 0.75rem; }
+        .user-avatar { width: 48px; height: 48px; border-radius: 50%; background-color: #00E0FF; border: 2px solid #3cffce; display: flex; justify-content: center; align-items: center; font-weight: 600; font-size: 1.2rem; color: var(--bg-primary); text-transform: uppercase; }
+        .welcome-text h2 { font-size: 1.1rem; font-weight: 600; margin: 0; }
+        .welcome-text p { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
+        .wallet-button { display: flex; align-items: center; gap: 0.5rem; background-color: var(--accent-red); padding: 0.6rem 1rem; border-radius: 50px; font-weight: 600; font-size: 0.95rem; border: none; color: white; text-decoration: none; }
+        .wallet-button .plus-icon { background-color: #fff; color: var(--accent-red); border-radius: 50%; width: 20px; height: 20px; display: inline-flex; justify-content: center; align-items: center; font-weight: bold; }
+        .section-header { margin-bottom: 1rem; }
+        .section-header h2 { font-size: 1.25rem; font-weight: 600; }
+        .section-header p { font-size: 0.9rem; color: var(--text-secondary); }
+        .contest-categories { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 2rem; }
+        .category-card { background-color: var(--bg-secondary); border-radius: 12px; padding: 1.25rem 0.5rem; text-align: center; border: 1px solid var(--border-color); cursor: pointer; }
+        .category-card .icon { font-size: 1.5rem; color: var(--accent-primary); margin-bottom: 0.5rem; }
+        .game-list { display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 1rem; scrollbar-width: none; } .game-list::-webkit-scrollbar { display: none; }
+        .game-card { flex: 0 0 140px; width: 140px; height: 140px; border-radius: 16px; overflow: hidden; border: 2px solid #333355; cursor: pointer; }
+        .game-card img { width: 100%; height: 100%; object-fit: cover; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--bg-secondary); display: flex; justify-content: space-around; padding: 0.75rem 0; border-top: 1px solid var(--border-color); z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 0.75rem; color: var(--text-secondary); border: none; background: none; cursor: pointer; flex-grow: 1; text-decoration: none; }
+        .nav-item .icon { font-size: 1.5rem; }
+        .nav-item.active { color: var(--accent-secondary); }
+        .profile-card { background-color: var(--bg-secondary); border-radius: 12px; padding: 1rem; display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+        .profile-avatar { flex-shrink: 0; width: 60px; height: 60px; border-radius: 50%; background-color: #008080; display: flex; justify-content: center; align-items: center; font-weight: 600; font-size: 1.5rem; color: white; }
+        .profile-info h3 { font-size: 1.2rem; font-weight: 600; margin: 0; }
+        .profile-info p { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
+        .profile-edit-btn { color: var(--accent-secondary); font-weight: 600; text-decoration: none; margin-left: auto; }
+        .profile-menu { display: flex; flex-direction: column; gap: 0.75rem; }
+        .menu-item { background-color: var(--bg-secondary); border-radius: 12px; padding: 1rem; display: flex; align-items: center; text-decoration: none; color: var(--text-primary); }
+        .menu-item .icon { font-size: 1.2rem; color: var(--accent-secondary); width: 30px; margin-right: 0.75rem; text-align: center; }
+        .menu-item span { flex-grow: 1; font-weight: 500; }
+        .menu-item .chevron { color: var(--text-secondary); }
+        .logout-btn { display: block; width: 100%; background-color: var(--accent-red); color: white; text-align: center; padding: 0.9rem; border-radius: 12px; font-weight: 600; font-size: 1.1rem; border: none; margin-top: 2rem; cursor: pointer; }
+        .tournament-tabs { display: flex; justify-content: space-around; background-color: var(--bg-secondary); padding: 5px; border-radius: 8px; margin-bottom: 15px; } .tab-item { color: var(--text-secondary); background: none; border: none; padding: 8px 10px; font-weight: 600; border-radius: 6px; flex-grow: 1; text-align: center; cursor: pointer; } .tab-item.active { background-color: var(--accent-red); color: white; }
+        .tournament-card { background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 15px; padding: 1rem; }
+        #globalLoaderEl { background: var(--bg-primary); display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; justify-content: center; align-items: center; }
+        .fancy-spinner { width: 5rem; height: 5rem; border-radius: 50%; border: 3px solid var(--border-color); border-top-color: var(--accent-primary); animation: spin 1s ease-in-out infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .custom-card { background-color: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border-color); padding: 15px; margin-bottom: 15px; }
+        .form-control { background-color: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary); }
+        
+        /* === SLIDER CSS (THEEK KAR DIYA GAYA HAI) === */
+        .swiper { width: 100%; border-radius: 16px; margin-bottom: 2rem; background-color: var(--bg-secondary); aspect-ratio: 16 / 9; overflow: hidden; }
+        .swiper-slide { text-align: center; font-size: 18px; background: var(--bg-secondary); display: flex; justify-content: center; align-items: center; }
+        .swiper-slide img { display: block; width: 100%; height: 100%; object-fit: cover; }
+        .swiper-pagination-bullet-active { background-color: var(--accent-secondary) !important; }
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="header-left">
+             <button class="header-back-button" id="headerBackBtn"><i class="fas fa-arrow-left"></i></button>
+            <div class="user-info" id="headerUserInfo">
+                <div class="user-avatar" id="headerAvatar">GU</div>
+                <div class="welcome-text">
+                    <h2 id="headerWelcomeText">Welcome,</h2>
+                    <p id="headerUserGreeting">Guest</p>
+                </div>
+            </div>
+             <div class="header-page-title" id="headerPageTitle"></div>
+        </div>
+        <a href="#" class="wallet-button" id="headerWalletChip" data-section="wallet-section">
+            <i class="fa-solid fa-wallet"></i>
+            <span id="headerChipBalance">0.00</span>
+            <span class="plus-icon">+</span>
+        </a>
+    </header>
+
+    <main class="main-content">
+        <div id="globalLoaderEl"><div class="fancy-spinner"></div></div>
+        <section id="login-section" class="section"></section>
+        <section id="home-section" class="section"></section>
+        <section id="profile-section" class="section"></section>
+        <section id="wallet-section" class="section"></section>
+        <section id="history-section" class="section"></section>
+        <section id="leaderboard-section" class="section"></section>
+        <section id="earn-section" class="section"></section>
+        <section id="notifications-section" class="section"></section>
+        <section id="tournaments-section" class="section"></section>
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" data-section="home-section"><i class="icon fas fa-home"></i><span>Home</span></a>
+        <a href="#" class="nav-item" data-section="history-section"><i class="icon fas fa-gamepad"></i><span>Matches</span></a>
+        <a href="#" class="nav-item" data-section="leaderboard-section"><i class="icon fas fa-trophy"></i><span>Leaderboard</span></a>
+        <a href="#" class="nav-item" data-section="wallet-section"><i class="icon fas fa-wallet"></i><span>Wallet</span></a>
+        <a href="#" class="nav-item" data-section="profile-section"><i class="icon fas fa-user-circle"></i><span>Profile</span></a>
+    </nav>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    
+    <script type="module">
+        // ===============================================================
+        // ================= !!! SABSE ZAROORI !!! =======================
+        // APNA SAHI FIREBASE CONFIG OBJECT YAHAAN PASTE KAREIN
+        // ===============================================================
+const firebaseConfig = {
+  apiKey: "AIzaSyAGMkM8GzuZGHIREplQyeUqOsszJ1HLeos",
+  authDomain: "copy-98d2a.firebaseapp.com",
+  projectId: "copy-98d2a",
+  storageBucket: "copy-98d2a.firebasestorage.app",
+  messagingSenderId: "529183426719",
+  appId: "1:529183426719:web:68f1f5006e915aeefcbaaa",
+  measurementId: "G-LWDNRY533N"
+};
+        // ===============================================================
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getDatabase, ref, get, set, serverTimestamp, onValue } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+        import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+
+        let app, db, auth;
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getDatabase(app);
+            auth = getAuth(app);
+        } catch (error) {
+            document.body.innerHTML = `<div style="padding:20px; color:red;">Firebase config error: ${error.message}</div>`;
+            throw error;
+        }
+
+        const getElement = (id) => document.getElementById(id);
+        
+        let currentUser = null;
+        let userProfile = {};
+        let allTournamentsCache = {};
+        let appSettings = {};
+        let dbListeners = {};
+
+        const showLoader = (show) => getElement('globalLoaderEl').style.display = show ? 'flex' : 'none';
+
+        function showStatusMessage(elementId, message, type = 'danger') {
+            const element = getElement(elementId);
+            if (!element) return;
+            element.innerHTML = message;
+            element.className = `alert alert-${type} mt-3`;
+            element.style.display = 'block';
+            setTimeout(() => { if (element.style.display === 'block') element.style.display = 'none'; }, 5000);
+        }
+
+        function renderPageContent(sectionId) {
+            const section = getElement(sectionId);
+            if (!section || section.innerHTML.trim() !== '') return; // Agar content pehle se hai to dobara na banayein
+
+            let content = '';
+            if (sectionId === 'login-section') {
+                content = `
+                    <div class="container" style="max-width: 450px; margin-top: 5vh;">
+                        <div class="text-center mb-4"><img src="https://via.placeholder.com/80/FFFFFF/0C0C27?text=LOGO" alt="Logo" id="loginLogoEl" style="width: 80px; border-radius: 12px;"></div>
+                        <div class="card custom-card"> <div class="card-body p-4">
+                            <form id="emailLoginForm">
+                                <h2 class="card-title text-center mb-4 text-white">Login</h2>
+                                <div class="mb-3"><label for="loginEmailInputEl" class="form-label">Email</label><input type="email" class="form-control" id="loginEmailInputEl" required></div>
+                                <div class="mb-3"><label for="loginPasswordInputEl" class="form-label">Password</label><input type="password" class="form-control" id="loginPasswordInputEl" required></div>
+                                <div id="loginStatusMessageEl" class="alert mt-3" style="display: none;"></div>
+                                <div class="d-grid"><button type="button" id="loginEmailBtnEl" class="btn" style="background-color: var(--accent-red); color: white;">Login</button></div>
+                                <button type="button" id="showSignupToggleBtnEl" class="btn btn-link d-block text-center mt-2" style="color: var(--accent-secondary); text-decoration: none;">Need an account? Sign Up</button>
+                            </form>
+                            <form id="emailSignupForm" style="display: none;">
+                                <h2 class="card-title text-center mb-4 text-white">Sign Up</h2>
+                                <div class="mb-3"><label for="signupNameInputEl" class="form-label">Full Name</label><input type="text" class="form-control" id="signupNameInputEl" required></div>
+                                <div class="mb-3"><label for="signupEmailInputEl" class="form-label">Email</label><input type="email" class="form-control" id="signupEmailInputEl" required></div>
+                                <div class="mb-3"><label for="signupPasswordInputEl" class="form-label">Password</label><input type="password" class="form-control" id="signupPasswordInputEl" required></div>
+                                <div id="signupStatusMessageEl" class="alert mt-3" style="display: none;"></div>
+                                <div class="d-grid"><button type="button" id="signupEmailBtnEl" class="btn" style="background-color: var(--accent-secondary); color: var(--bg-primary);">Sign Up</button></div>
+                                <button type="button" id="showLoginToggleBtnEl" class="btn btn-link d-block text-center mt-2" style="color: var(--accent-secondary); text-decoration: none;">Already have an account? Login</button>
+                            </form>
+                        </div></div>
+                    </div>`;
+            } else if (sectionId === 'home-section') {
+                content = `
+<!-- Promotional Slider ka Sahi HTML Structure -->
+<div id="promotionSlider" class="swiper"> <!-- Yahan 'swiper-container' ki jagah 'swiper' class use karein -->
+    <div class="swiper-wrapper">
+        <!-- JavaScript iske andar slides daalega -->
+    </div>
+    <!-- Pagination dots (Optional) -->
+    <div class="swiper-pagination"></div>
+</div>
+                    <div class="my-contests">
+                        <div class="section-header"><h2>My Contests</h2><p>Your Tournaments Journey</p></div>
+                        <div class="contest-categories">
+                            <div class="category-card" data-status-target="ongoing"><div class="icon"><i class="fas fa-play-circle"></i></div><span>ONGOING</span></div>
+                            <div class="category-card" data-status-target="upcoming"><div class="icon"><i class="fas fa-arrow-clockwise"></i></div><span>UPCOMING</span></div>
+                            <div class="category-card" data-status-target="completed"><div class="icon"><i class="fas fa-check-circle"></i></div><span>RESULT</span></div>
+                        </div>
+                    </div>
+                    <div class="exclusive-tournaments">
+                        <div class="section-header"><h2>Game Categories</h2><p>Select a game to see matches</p></div>
+                        <div class="game-list" id="gamesListEl"></div>
+                    </div>`;
+            } else if (sectionId === 'profile-section') {
+                content = `
+                    <div class="profile-card">
+                        <div class="profile-avatar" id="profileCardAvatar"></div>
+                        <div class="profile-info">
+                            <h3 id="profileCardName">Username</h3>
+                            <p id="profileCardPhone"><span></span><i class="fa-solid fa-eye"></i></p>
+                        </div>
+                        <a href="#" class="profile-edit-btn" id="editProfileBtn">Edit</a>
+                    </div>
+                    <div class="profile-menu">
+                        <a href="#" class="menu-item" data-section="wallet-section"><i class="icon fa-solid fa-wallet"></i><span>My Wallet</span><i class="chevron fa-solid fa-chevron-right"></i></a>
+                        <a href="#" class="menu-item" data-section="history-section"><i class="icon fa-solid fa-gamepad"></i><span>My Matches</span><i class="chevron fa-solid fa-chevron-right"></i></a>
+                        <a href="#" class="menu-item" data-section="earn-section"><i class="icon fa-solid fa-users"></i><span>My Referrals</span><i class="chevron fa-solid fa-chevron-right"></i></a>
+                        <a href="#" class="menu-item" data-section="notifications-section"><i class="icon fa-solid fa-bullhorn"></i><span>Announcements</span><i class="chevron fa-solid fa-chevron-right"></i></a>
+                        <a href="#" class="menu-item" id="customerSupportBtn"><i class="icon fa-solid fa-headset"></i><span>Customer Support</span><i class="chevron fa-solid fa-chevron-right"></i></a>
+                    </div>
+                    <button class="logout-btn" id="logoutBtn">Logout</button>`;
+            } else if (sectionId === 'tournaments-section') {
+                content = `
+                    <div class="tournament-tabs">
+                        <button class="tab-item active" data-status="upcoming">Upcoming</button>
+                        <button class="tab-item" data-status="ongoing">Ongoing</button>
+                        <button class="tab-item" data-status="completed">Results</button>
+                    </div>
+                    <div id="tournamentsListContainerEl"></div>
+                `;
+            } else {
+                 content = `<div class="text-center p-5"><h2 class="text-white">${sectionId.replace('-section', '').toUpperCase()}</h2><p class="text-secondary">This page is under construction.</p></div>`;
+            }
+            section.innerHTML = content;
+        }
+        
+        function showSection(sectionId, data = {}) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            const targetSection = getElement(sectionId);
+            if(targetSection) {
+                renderPageContent(sectionId);
+                targetSection.classList.add('active');
+                attachEventListenersForSection(sectionId, data);
+            }
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.section === sectionId);
+            });
+            const isHomePage = sectionId === 'home-section';
+            getElement('headerUserInfo').style.display = isHomePage ? 'flex' : 'none';
+            getElement('headerBackBtn').style.display = isHomePage ? 'none' : 'block';
+            getElement('headerPageTitle').style.display = isHomePage ? 'none' : 'block';
+            if (!isHomePage) {
+                getElement('headerPageTitle').textContent = sectionId.replace('-section', '').replace(/^\w/, c => c.toUpperCase());
+            }
+        }
+
+        function populateUserInfo(profile) {
+            const displayName = profile.displayName || 'User';
+            getElement('headerUserGreeting').textContent = displayName;
+            getElement('headerAvatar').textContent = displayName.substring(0, 2).toUpperCase();
+            getElement('headerChipBalance').textContent = (profile.balance || 0).toFixed(2);
+        }
+
+        function populateProfilePage(profile) {
+            if (!getElement('profileCardAvatar')) return;
+            const displayName = profile.displayName || 'User';
+            const phone = profile.phone || 'Not available';
+            getElement('profileCardAvatar').textContent = displayName.substring(0, 2).toUpperCase();
+            getElement('profileCardName').textContent = displayName;
+            getElement('profileCardPhone').querySelector('span').textContent = phone;
+        }
+
+        function setupRealtimeListeners(uid) {
+            detachAllDbListeners();
+            const userRef = ref(db, `users/${uid}`);
+            dbListeners.userProfile = onValue(userRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    userProfile = snapshot.val();
+                    populateUserInfo(userProfile);
+                    if (getElement('profile-section').classList.contains('active')) {
+                        populateProfilePage(userProfile);
+                    }
+                } else { signOut(auth); }
+            });
+        }
+        
+        function detachAllDbListeners() {
+            if(dbListeners.userProfile && typeof dbListeners.userProfile === 'function') {
+                dbListeners.userProfile(); // This is the 'off' function returned by onValue
+            }
+            dbListeners = {};
+        }
+
+        async function handleAuthStateChange(user) {
+            showLoader(true);
+            detachAllDbListeners(); 
+            currentUser = user;
+            if (user) {
+                const userRef = ref(db, 'users/' + user.uid);
+                const snapshot = await get(userRef);
+                if (!snapshot.exists()) {
+                    const nameFromEmail = user.email.split('@')[0];
+                    const newUserProfile = { uid: user.uid, displayName: nameFromEmail, email: user.email, balance: 0, createdAt: serverTimestamp() };
+                    await set(userRef, newUserProfile);
+                }
+                setupRealtimeListeners(user.uid);
+                showSection('home-section');
+            } else {
+                userProfile = {};
+                showSection('login-section');
+            }
+            showLoader(false);
+        }
+
+        // YEH FUNCTION ADD KIYA GAYA HAI
+        async function loadAppSettings() {
+            try {
+                const snapshot = await get(ref(db, 'settings'));
+                if (snapshot.exists()) {
+                    appSettings = snapshot.val() || {};
+                    // Update app logo if available
+                    const loginLogoEl = getElement('loginLogoEl');
+                    if (loginLogoEl && appSettings.userAppLogoUrl) {
+                        loginLogoEl.src = appSettings.userAppLogoUrl;
+                    }
+                }
+            } catch(e) { console.error("Could not load app settings:", e); }
+        }
+        
+
+        // Is poore function ko apne script mein daalein
+// Puraane 'loadPromotions' function ko is naye function se replace karein
+// Puraane 'loadPromotions' function ko is naye function se replace karein
+async function loadPromotions() {
+    if (typeof Swiper === 'undefined') {
+        console.error('Swiper JS is not loaded. Please add the script tag.');
+        return;
+    }
+
+    const sliderContainer = getElement('promotionSlider');
+    if (!sliderContainer) return;
+
+    const sliderWrapper = sliderContainer.querySelector('.swiper-wrapper');
+    if (!sliderWrapper) return;
+    
+    // Placeholder daalna jab tak data load na ho
+    sliderWrapper.innerHTML = '<div class="swiper-slide"><div class="spinner-border text-light" role="status"></div></div>';
+
+    try {
+        const promotionsRef = ref(db, 'promotions');
+        const snapshot = await get(promotionsRef);
+
+        sliderWrapper.innerHTML = ''; // Placeholder hatana
+
+        if (snapshot.exists()) {
+            const promotions = snapshot.val();
+            Object.values(promotions).forEach(promo => {
+                if (promo.imageUrl) {
+                    sliderWrapper.innerHTML += `
+                        <div class="swiper-slide">
+                            <a href="${promo.link || '#'}"><img src="${promo.imageUrl}" alt="Promotion"></a>
+                        </div>
+                    `;
+                }
+            });
+
+            // Yahan check karna hai ki koi purana slider instance to nahi hai
+            if (sliderContainer.swiper) {
+                sliderContainer.swiper.destroy(true, true);
+            }
+
+            // Swiper.js ko NAYE options ke saath initialize karna
+            new Swiper(sliderContainer, {
+                slidesPerView: 1,      // Ek baar mein ek hi slide dikhaye
+                spaceBetween: 15,        // Slides ke beech mein thodi si jagah
+                centeredSlides: true,    // Active slide hamesha center mein rahegi
+                loop: true,
+                autoplay: {
+                    delay: 2500,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+            });
+            sliderContainer.style.display = 'block';
+
+        } else {
+            sliderContainer.style.display = 'none';
+        }
+    } catch (error) {
+        console.error("Error loading promotions:", error);
+        sliderWrapper.innerHTML = '<div class="swiper-slide"><p class="text-danger p-3">Could not load promotions.</p></div>';
+    }
+}
+
+
+        async function loadGameCategories() {
+            const gamesListEl = getElement('gamesListEl');
+            if (!gamesListEl) return;
+            gamesListEl.innerHTML = '<p>Loading Categories...</p>';
+            try {
+                const gamesSnapshot = await get(ref(db, 'games'));
+                if (!gamesSnapshot.exists()) { gamesListEl.innerHTML = '<p>No game categories found.</p>'; return; }
+                gamesListEl.innerHTML = '';
+                const games = gamesSnapshot.val();
+                appSettings.games = games;
+                Object.entries(games).forEach(([gameId, gameData]) => {
+                    const card = document.createElement('div');
+                    card.className = 'game-card';
+                    card.innerHTML = `<img src="${gameData.imageUrl}" alt="${gameData.name}">`;
+                    card.addEventListener('click', () => {
+                        showSection('tournaments-section', { gameId: gameId, status: 'upcoming' });
+                    });
+                    gamesListEl.appendChild(card);
+                });
+            } catch (e) { console.error("Error loading games:", e); gamesListEl.innerHTML = '<p class="text-danger">Failed to load categories.</p>'; }
+        }
+        
+        async function loadMatchesForCategory(gameId, status) {
+            const container = getElement('tournamentsListContainerEl');
+            if (!container) return;
+            container.innerHTML = `<p class="text-center p-5">Loading matches...</p>`;
+
+            if (Object.keys(allTournamentsCache).length === 0) {
+                const tournamentsSnapshot = await get(ref(db, 'tournaments'));
+                if (tournamentsSnapshot.exists()) allTournamentsCache = tournamentsSnapshot.val();
+            }
+            const filteredMatches = Object.entries(allTournamentsCache)
+                .filter(([, matchData]) => matchData.gameId === gameId && matchData.status === status);
+
+            if (filteredMatches.length === 0) { container.innerHTML = `<p class="text-center p-5 text-secondary">No '${status}' matches found.</p>`; return; }
+            container.innerHTML = '';
+            filteredMatches.forEach(([matchId, matchData]) => {
+                const card = document.createElement('div');
+                card.className = 'custom-card tournament-card';
+                card.innerHTML = `<h5>${matchData.name}</h5><p>Prize: ₹${matchData.prizePool || 0} | Entry: ₹${matchData.entryFee || 'Free'}</p><button class="btn btn-sm" style="background-color: var(--accent-red); color: white;">Join Now</button>`;
+                container.appendChild(card);
+            });
+        }
+
+        function attachEventListenersForSection(sectionId, data) {
+            if (sectionId === 'home-section') {
+                loadPromotions();
+                loadGameCategories();
+            }
+            if (sectionId === 'login-section') {
+                getElement('loginEmailBtnEl').onclick = async () => {
+                    const email = getElement('loginEmailInputEl').value;
+                    const pass = getElement('loginPasswordInputEl').value;
+                    if(!email || !pass) return showStatusMessage('loginStatusMessageEl', 'Please fill all fields.');
+                    showLoader(true);
+                    try { await signInWithEmailAndPassword(auth, email, pass); } 
+                    catch (e) { showStatusMessage('loginStatusMessageEl', e.message); }
+                    finally { showLoader(false); }
+                };
+                getElement('signupEmailBtnEl').onclick = async () => {
+                    const name = getElement('signupNameInputEl').value;
+                    const email = getElement('signupEmailInputEl').value;
+                    const pass = getElement('signupPasswordInputEl').value;
+                    if(!name || !email || !pass) return showStatusMessage('signupStatusMessageEl', 'Please fill all fields.');
+                    showLoader(true);
+                    try { 
+                        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+                        await set(ref(db, `users/${cred.user.uid}`), { uid: cred.user.uid, displayName: name, email: email, balance: 0, createdAt: serverTimestamp() });
+                    } 
+                    catch (e) { showStatusMessage('signupStatusMessageEl', e.message); }
+                    finally { showLoader(false); }
+                };
+                getElement('showSignupToggleBtnEl').onclick = () => { getElement('emailLoginForm').style.display = 'none'; getElement('emailSignupForm').style.display = 'block'; };
+                getElement('showLoginToggleBtnEl').onclick = () => { getElement('emailLoginForm').style.display = 'block'; getElement('emailSignupForm').style.display = 'none'; };
+            }
+            if (sectionId === 'profile-section') {
+                populateProfilePage(userProfile);
+                getElement('logoutBtn').onclick = () => { if(confirm('Are you sure?')) signOut(auth); };
+                querySel('#profile-section').querySelectorAll('.menu-item[data-section]').forEach(item => {
+                    item.addEventListener('click', (e) => { e.preventDefault(); showSection(item.dataset.section); });
+                });
+            }
+            if(sectionId === 'tournaments-section' && data.gameId) {
+                loadMatchesForCategory(data.gameId, data.status || 'upcoming');
+                querySel('#tournaments-section').querySelectorAll('.tab-item').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        querySel('#tournaments-section').querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        loadMatchesForCategory(data.gameId, tab.dataset.status);
+                    });
+                });
+            }
+        }
+        
+        function initializeGlobalEventListeners() {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', (e) => { e.preventDefault(); showSection(item.dataset.section); });
+            });
+            getElement('headerBackBtn').addEventListener('click', () => showSection('home-section'));
+        }
+        
+        // --- APP START ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            if(!auth) return;
+            showLoader(true);
+            initializeGlobalEventListeners();
+            // YEH LINE ADD KI GAYI HAI
+            await loadAppSettings(); 
+            onAuthStateChanged(auth, handleAuthStateChange);
+        });
+    </script>
+</body>
+</html>
